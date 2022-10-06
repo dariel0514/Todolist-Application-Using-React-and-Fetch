@@ -1,24 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
 
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
-
-//create your first component
 const Home = () => {
+	useEffect(() => {
+	fetch("http://assets.breatheco.de/apis/fake/todos/user/dariel")
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log(error))
+	}, []);
+
+const addTask = (myTask) => {
+	fetch("http://assets.breatheco.de/apis/fake/todos/user/dariel",{
+	method: 'PUT',
+	body: JSON.stringify(myTask),
+	redirect: 'follow',
+	headers: {
+		"Content-Type": "application/json",
+	},
+  })
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log(error));
+};
+
+
+
 	return (
 		<div className="text-center">
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
+		<button
+		className="btn btn-primary"
+		onClick={() => addTask([{label: 'Eat', done: false}])}
+		>Add</button>
 		</div>
 	);
 };
