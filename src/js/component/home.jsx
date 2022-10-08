@@ -1,37 +1,47 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 
 const Home = () => {
+	const [list, setList] = useState([])
+	
 	useEffect(() => {
+		getList()
+	},[])
+
+const getList = () => {
 	fetch("http://assets.breatheco.de/apis/fake/todos/user/dariel")
-  .then(response => response.text())
-  .then(result => console.log(result))
+  .then(response => response.json())
+  .then(result => setList(result))
   .catch(error => console.log(error))
-	}, []);
+	}
 
 const addTask = (myTask) => {
+	const newList = [...list, myTask]
 	fetch("http://assets.breatheco.de/apis/fake/todos/user/dariel",{
 	method: 'PUT',
-	body: JSON.stringify(myTask),
-	redirect: 'follow',
 	headers: {
-		"Content-Type": "application/json",
+	'Content-Type': 'application/json'
 	},
-  })
-  .then(response => response.text())
-  .then(result => console.log(result))
-  .catch(error => console.log(error));
-};
+	body: JSON.stringify(newList),
+	redirect: 'follow'
+	})
+	.then(response => response.json())
+	.then(result => getList())
+	.catch(error => console.log(error))
+}
 
-
-
-	return (
-		<div className="text-center">
-		<button
-		className="btn btn-primary"
-		onClick={() => addTask([{label: 'Eat', done: false}])}
-		>Add</button>
-		</div>
-	);
+return (
+	<div className="text-center">
+		{list.map((task, i) => {
+			return(
+				<p key={i}>{task.label}</p>
+			)
+		})}
+	<button
+	className="btn btn-primary"
+	onClick={() => addTask([{label: 'Eat', done: false}])}
+	>Add</button>
+	</div>
+);
 };
 
 export default Home;
