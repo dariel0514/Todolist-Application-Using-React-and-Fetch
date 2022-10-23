@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const Home = () => {
+const Home = async () => {
   const [list, setList] = useState([]);
 
   useEffect(() => {
@@ -11,8 +11,9 @@ const Home = () => {
     fetch("https://assets.breatheco.de/apis/fake/todos/user/dariel")
       .then((response) => response.json())
       .then((result) => {
-		console.log(result)
-		setList(result)})
+        console.log(result);
+        setList(result);
+      })
       .catch((error) => console.log(error));
   };
 
@@ -24,6 +25,19 @@ const Home = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(newList),
+      redirect: "follow",
+    })
+      .then((response) => response.json())
+      .then((result) => getList())
+      .catch((error) => console.log(error));
+  };
+  const deleteTask = (myTask) => {
+    fetch("https://assets.breatheco.de/apis/fake/todos/user/dariel", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(myTask),
       redirect: "follow",
     })
       .then((response) => response.json())
@@ -42,6 +56,13 @@ const Home = () => {
         onClick={() => addTask({ label: "Eat", done: false })}
       >
         Add
+      </button>
+      <button
+        className="btn btn-success"
+        style={{ margin: "10px", backgroundColor: "red" }}
+        onClick={() => deleteTask({ label: "Eat", done: false })}
+      >
+        Delete
       </button>
     </div>
   );
