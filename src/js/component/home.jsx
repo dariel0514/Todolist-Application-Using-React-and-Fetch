@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const Home = async () => {
+const Home = () => {
   const [list, setList] = useState([]);
 
   useEffect(() => {
@@ -60,7 +60,7 @@ const Home = async () => {
       <button
         className="btn btn-success"
         style={{ margin: "10px", backgroundColor: "red" }}
-        onClick={() => deleteTask({ label: "Eat", done: false })}
+        onClick={() => deleteTask(1)}
       >
         Delete
       </button>
