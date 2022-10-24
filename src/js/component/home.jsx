@@ -32,7 +32,7 @@ const Home = () => {
       .catch((error) => console.log(error));
   };
   const deleteTask = (myTask) => {
-    fetch("https://assets.breatheco.de/apis/fake/todos/user/dariel", {
+    fetch("https://assets.breatheco.de/apis/fake/todos/user/dariel/" + myTask, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
