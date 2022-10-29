@@ -31,18 +31,19 @@ const Home = () => {
       .then((result) => getList())
       .catch((error) => console.log(error));
   };
-  const deleteTask = (myTask) => {
-    fetch("https://assets.breatheco.de/apis/fake/todos/user/dariel/" + myTask, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(myTask),
+
+  const deleteTask = (index) => {
+    const delList = list.filter((task, i) => i != index);
+    console.log(delList);
+    fetch("https://assets.breatheco.de/apis/fake/todos/user/dariel", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(delList),
       redirect: "follow",
     })
       .then((response) => response.json())
       .then((result) => getList())
-      .catch((error) => console.log(error));
+      .catch((error) => console.log("error", error));
   };
 
   return (
