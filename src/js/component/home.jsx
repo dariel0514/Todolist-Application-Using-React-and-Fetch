@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 const Home = () => {
   const [list, setList] = useState([]);
-
+  const [input, setInput] = useState("");
   useEffect(() => {
     getList();
   }, []);
@@ -18,7 +18,7 @@ const Home = () => {
   };
 
   const addTask = (myTask) => {
-    var newList = [...list, myTask];
+    var newList = [...list, { label: myTask, done: false }];
     fetch("https://assets.breatheco.de/apis/fake/todos/user/dariel", {
       method: "PUT",
       headers: {
@@ -27,7 +27,9 @@ const Home = () => {
       body: JSON.stringify(newList),
       redirect: "follow",
     })
-      .then((response) => response.json())
+      .then((response) => {
+        response.status === 200 ? setList(newList) : "";
+      })
       .then((result) => getList())
       .catch((error) => console.log(error));
   };
@@ -47,24 +49,42 @@ const Home = () => {
   };
 
   return (
-    <div className="text-center">
-      {list.map((task, i) => {
-        return <p key={i}>{task.label}</p>;
-      })}
+    <div className="text-center container">
       <h1>To Do List</h1>
-      <button
-        className="btn btn-success"
-        onClick={() => addTask({ label: "Eat", done: false })}
-      >
-        Add
-      </button>
-      <button
-        className="btn btn-success"
-        style={{ margin: "10px", backgroundColor: "red" }}
-        onClick={() => deleteTask(1)}
-      >
-        Delete
-      </button>
+      <form>
+        <input
+          type="text"
+          onChange={(e) => setInput(e.target.value)}
+          id="newtask"
+          name="newtask"
+        ></input>
+        <button
+          className="btn btn-success"
+          onClick={(e) => {
+            e.preventDefault();
+            addTask(input);
+          }}
+        >
+          Add
+        </button>
+        <div>
+          <ul className="list-group">
+            {list.map((task, i) => {
+              return (
+                <li className="list-group-item d-flex justify-content-between">
+                  <p key={i}>{task.label}</p>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => deleteTask(i)}
+                  >
+                    delete
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </form>
     </div>
   );
 };
